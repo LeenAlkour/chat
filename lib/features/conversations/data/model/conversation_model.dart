@@ -3,7 +3,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../domain/entities/conversation_entity.dart';
 
 part 'conversation_model.freezed.dart';
-part 'conversation_model.g.dart';
 
 @freezed
 abstract class ConversationModel with _$ConversationModel {
@@ -12,94 +11,93 @@ abstract class ConversationModel with _$ConversationModel {
   const factory ConversationModel({
     required String id,
     required String type,
-    @JsonKey(name: 'last_message_at') required String lastMessageAt,
-    @JsonKey(name: 'created_at') required String createdAt,
-    @JsonKey(name: 'last_message_id') String? lastMessageId,
-    // من join مع messages
-    @JsonKey(name: 'last_message_content') String? lastMessageContent,
-    @JsonKey(name: 'last_message_type') String? lastMessageType,
-    @JsonKey(name: 'conversation_participants')
-    required List<ParticipantModel> participants,
+    required String lastMessageAt,
+    required String createdAt,
+    String? lastMessageContent,
+    String? lastMessageType,
+    String? lastMessageSenderId,
+    required int unreadCount,
+    String? otherUserId,
+    String? otherUsername,
+    String? otherAvatarUrl,
+    String? otherFullName,
+    required int otherIsOnline,
+    String? otherLastSeen,
+    required String draft,
+    required int isMuted,
+    required double scrollOffset,
   }) = _ConversationModel;
 
-  factory ConversationModel.fromJson(Map<String, dynamic> json) =>
-      _$ConversationModelFromJson(json);
+  // ── من SQLite row مباشرة ──────────────────────────
+  factory ConversationModel.fromMap(Map<String, dynamic> map) {
+    return ConversationModel(
+      id: map['id'] as String,
+      type: map['type'] as String? ?? 'direct',
+      lastMessageAt:
+          map['last_message_at'] as String? ?? DateTime.now().toIso8601String(),
+      createdAt:
+          map['created_at'] as String? ?? DateTime.now().toIso8601String(),
+      lastMessageContent: map['last_message_content'] as String?,
+      lastMessageType: map['last_message_type'] as String?,
+      lastMessageSenderId: map['last_message_sender_id'] as String?,
+      unreadCount: (map['unread_count'] as num?)?.toInt() ?? 0,
+      otherUserId: map['other_user_id'] as String?,
+      otherUsername: map['username'] as String?,
+      otherAvatarUrl: map['avatar_url'] as String?,
+      otherFullName: map['full_name'] as String?,
+      otherIsOnline: (map['is_online'] as num?)?.toInt() ?? 0,
+      otherLastSeen: map['last_seen'] as String?,
+      draft: map['draft'] as String? ?? '',
+      isMuted: (map['is_muted'] as num?)?.toInt() ?? 0,
+      scrollOffset: (map['scroll_offset'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 
-  ConversationEntity toEntity(String currentUserId) {
-    final unread = participants
-        .firstWhere(
-          (p) => p.userId == currentUserId,
-          orElse: () => const ParticipantModel(
-            id: '',
-            conversationId: '',
-            userId: '',
-            unreadCount: 0,
-            lastReadAt: '',
-            joinedAt: '',
-            user: null,
-          ),
-        )
-        .unreadCount;
-
+  // ── toEntity ──────────────────────────────────────
+  ConversationEntity toEntity() {
     return ConversationEntity(
       id: id,
       type: type,
       lastMessageAt: DateTime.parse(lastMessageAt),
       createdAt: DateTime.parse(createdAt),
-      lastMessageId: lastMessageId,
       lastMessageContent: lastMessageContent,
       lastMessageType: lastMessageType,
-      participants: participants
-          .where((p) => p.userId != currentUserId)
-          .map((p) => p.toEntity())
-          .toList(),
-      unreadCount: unread,
+      lastMessageSenderId: lastMessageSenderId,
+      unreadCount: unreadCount,
+      otherUserId: otherUserId,
+      otherUsername: otherUsername,
+      otherAvatarUrl: otherAvatarUrl,
+      otherFullName: otherFullName,
+      otherIsOnline: otherIsOnline == 1,
+      otherLastSeen: otherLastSeen != null
+          ? DateTime.tryParse(otherLastSeen!)
+          : null,
+      draft: draft,
+      isMuted: isMuted == 1,
+      scrollOffset: scrollOffset,
     );
   }
-}
 
-@freezed
-abstract class ParticipantModel with _$ParticipantModel {
-  const ParticipantModel._();
-
-  const factory ParticipantModel({
-    required String id,
-    @JsonKey(name: 'conversation_id') required String conversationId,
-    @JsonKey(name: 'user_id') required String userId,
-    @JsonKey(name: 'unread_count') required int unreadCount,
-    @JsonKey(name: 'last_read_at') required String lastReadAt,
-    @JsonKey(name: 'joined_at') required String joinedAt,
-    UserModel? user,
-  }) = _ParticipantModel;
-
-  factory ParticipantModel.fromJson(Map<String, dynamic> json) =>
-      _$ParticipantModelFromJson(json);
-
-  ParticipantEntity toEntity() => ParticipantEntity(
-    userId: userId,
-    username: user?.username ?? '',
-    avatarUrl: user?.avatarUrl,
-    fullName: user?.fullName,
-    isOnline: user?.isOnline ?? false,
-    lastSeen: DateTime.parse(
-      user?.lastSeen ?? DateTime.now().toIso8601String(),
-    ),
-    unreadCount: unreadCount,
-  );
-}
-
-@freezed
-abstract class UserModel with _$UserModel {
-  const factory UserModel({
-    required String id,
-    required String username,
-    String? email,
-    @JsonKey(name: 'avatar_url') String? avatarUrl,
-    @JsonKey(name: 'full_name') String? fullName,
-    @JsonKey(name: 'is_online') @Default(false) bool isOnline,
-    @JsonKey(name: 'last_seen') required String lastSeen,
-  }) = _UserModel;
-
-  factory UserModel.fromJson(Map<String, dynamic> json) =>
-      _$UserModelFromJson(json);
+  // ── fromEntity (لو احتجت تحويل عكسي مثلاً للـ cache) ──
+  factory ConversationModel.fromEntity(ConversationEntity entity) {
+    return ConversationModel(
+      id: entity.id,
+      type: entity.type,
+      lastMessageAt: entity.lastMessageAt.toIso8601String(),
+      createdAt: entity.createdAt.toIso8601String(),
+      lastMessageContent: entity.lastMessageContent,
+      lastMessageType: entity.lastMessageType,
+      lastMessageSenderId: entity.lastMessageSenderId,
+      unreadCount: entity.unreadCount,
+      otherUserId: entity.otherUserId,
+      otherUsername: entity.otherUsername,
+      otherAvatarUrl: entity.otherAvatarUrl,
+      otherFullName: entity.otherFullName,
+      otherIsOnline: entity.otherIsOnline ? 1 : 0,
+      otherLastSeen: entity.otherLastSeen?.toIso8601String(),
+      draft: entity.draft,
+      isMuted: entity.isMuted ? 1 : 0,
+      scrollOffset: entity.scrollOffset,
+    );
+  }
 }

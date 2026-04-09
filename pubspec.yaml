@@ -59,6 +59,9 @@ dependencies:
   hive_flutter: ^1.1.0
   timeago: ^3.7.1
   cherry_toast: ^1.13.0
+  powersync: ^1.16.0
+  path: ^1.9.1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

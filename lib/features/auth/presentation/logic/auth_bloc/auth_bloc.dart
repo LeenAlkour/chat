@@ -1,3 +1,4 @@
+import 'package:chato/core/powersync/powersync_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:chato/features/auth/domain/usecase/login.dart';
 import 'package:chato/features/auth/domain/usecase/register.dart';
@@ -5,13 +6,16 @@ import 'package:chato/features/auth/domain/usecase/get_current_user.dart';
 import 'package:chato/features/auth/domain/usecase/logout.dart';
 import 'package:chato/features/auth/presentation/logic/auth_bloc/auth_event.dart';
 import 'package:chato/features/auth/presentation/logic/auth_bloc/auth_state.dart';
+
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
   final RegisterUseCase registerUseCase;
   final LogoutUseCase logoutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final PowerSyncService powerSyncService; // ✅ أضف هذا
 
   AuthBloc({
+    required this.powerSyncService, // ✅ هنا
     required this.loginUseCase,
     required this.registerUseCase,
     required this.logoutUseCase,
@@ -45,9 +49,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         print("Error");
       },
-      (success) {
-        if (success!=null) {
+      (success) async {
+        if (success != null) {
           emit(const AuthState.authenticated());
+
+          await powerSyncService.connect();
         } else {
           emit(const AuthState.unauthenticated());
         }
@@ -64,10 +70,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final result = await loginUseCase(params: event.user);
 
-    result.fold(
-      (failure) => emit(AuthState.failure(failure.message)),
-      (_) => emit(const AuthState.authenticated()),
-    );
+    result.fold((failure) => emit(AuthState.failure(failure.message)), (_) async{
+      
+      emit(const AuthState.authenticated());
+      await powerSyncService.connect();
+    });
   }
 
   Future<void> _onRegisterRequested(
@@ -91,6 +98,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // لاحقاً:
     await logoutUseCase();
 
+    await powerSyncService.disconnect();
     emit(const AuthState.unauthenticated());
   }
 }

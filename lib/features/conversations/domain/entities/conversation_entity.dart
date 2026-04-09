@@ -6,26 +6,21 @@ part 'conversation_entity.freezed.dart';
 abstract class ConversationEntity with _$ConversationEntity {
   const factory ConversationEntity({
     required String id,
-    required String type, // 'direct' | 'group'
+    required String type,
     required DateTime lastMessageAt,
     required DateTime createdAt,
-    String? lastMessageId,
     String? lastMessageContent,
     String? lastMessageType,
-    required List<ParticipantEntity> participants,
+    String? lastMessageSenderId,
     required int unreadCount,
+    String? otherUserId,
+    String? otherUsername,
+    String? otherAvatarUrl,
+    String? otherFullName,
+    @Default(false) bool otherIsOnline,
+    DateTime? otherLastSeen,
+    @Default('') String draft,
+    @Default(false) bool isMuted,
+    @Default(0.0) double scrollOffset,
   }) = _ConversationEntity;
-}
-
-@freezed
-abstract class ParticipantEntity with _$ParticipantEntity {
-  const factory ParticipantEntity({
-    required String userId,
-    required String username,
-    String? avatarUrl,
-    String? fullName,
-    required bool isOnline,
-    required DateTime lastSeen,
-    required int unreadCount,
-  }) = _ParticipantEntity;
 }

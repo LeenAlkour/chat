@@ -1,6 +1,7 @@
 
 
 import 'package:chato/core/di/service_locator.dart';
+import 'package:chato/core/powersync/powersync_service.dart';
 import 'package:chato/core/router/app_router.dart';
 import 'package:chato/features/auth/presentation/logic/auth_bloc/auth_bloc.dart';
 import 'package:chato/features/auth/presentation/logic/auth_bloc/auth_event.dart';
@@ -24,7 +25,7 @@ void main() async {
       logLevel: RealtimeLogLevel.info,
     ),
   );
-
+  await initPowerSync();
   await initializeDependencies();
 
   await ScreenUtil.ensureScreenSize();

@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Chato",
+      "request": "launch",
+      "type": "dart",
+      "args": [
+        "--dart-define=SUPABASE_URL=https://wyzurqspgcptjvxoaaxj.supabase.co",
+        "--dart-define=SUPABASE_ANON_KEY=sb_publishable_Yjq5P8gl1UHebeFDgvc9qQ_9l_hgI37",
+        "--dart-define=POWERSYNC_URL=https://69cbdff2f69619e9d4832dfa.powersync.journeyapps.com"
+      ]
+    }
+  ]
+}

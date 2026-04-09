@@ -1,17 +1,28 @@
-import 'package:chato/core/errors/failure.dart';
 import 'package:dartz/dartz.dart';
 
-import '../entities/conversation_change.dart';
+import '../../../../core/errors/failure.dart';
 import '../entities/conversation_entity.dart';
 
 abstract class ConversationsRepository {
-  /// جلب جميع المحادثات للمستخدم الحالي — يُستدعى مرة واحدة عند الفتح
+  /// قراءة أولى عند فتح الصفحة
   Future<Either<Failure, List<ConversationEntity>>> getConversations();
 
-  /// stream يُصدر فقط التغييرات الجزئية — لا يُعيد جلب القائمة
-  /// كل حدث يصف ما تغيّر بالضبط (رسالة جديدة، unread، presence)
-  Stream<Either<Failure, ConversationChange>> watchChanges();
+  /// stream يُصدر القائمة كاملة محدّثة عند أي تغيير
+  /// PowerSync يتولى المزامنة — لا نحتاج ConversationChange
+  Stream<Either<Failure, List<ConversationEntity>>> watchConversations();
 
-  /// إلغاء جميع قنوات Realtime
-  Future<void> dispose();
+  /// كتابة محلية فورية — PowerSync يرفعها للسيرفر تلقائياً
+  Future<Either<Failure, void>> sendMessage({
+    required String conversationId,
+    required String content,
+    String messageType,
+    String? replyToId,
+  });
+
+  Future<Either<Failure, void>> markAsRead(String conversationId);
+  Future<Either<Failure, void>> saveDraft(String conversationId, String text);
+  Future<Either<Failure, void>> toggleMute(
+    String conversationId, {
+    required bool muted,
+  });
 }

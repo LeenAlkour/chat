@@ -1,298 +1,105 @@
-import 'dart:async';
-
 import 'package:chato/features/conversations/data/model/conversation_model.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:powersync/powersync.dart';
 
-import '../../domain/entities/conversation_change.dart';
 
-abstract class ConversationsRemoteDataSource {
-  Future<List<ConversationModel>> getConversations();
-  Stream<ConversationChange> watchChanges();
-  Future<void> dispose();
-}
+class ConversationsDataSource {
+  final PowerSyncDatabase _db;
+  final String _userId;
 
-class SupabaseConversationsDataSource implements ConversationsRemoteDataSource {
-  final SupabaseClient _supabase;
+  ConversationsDataSource(this._db, this._userId);
 
-  RealtimeChannel? _channel;
-
-  final Set<String> _myConversationIds = {};
-
-  SupabaseConversationsDataSource(this._supabase);
-
-  String get _currentUserId {
-    final userId = _supabase.auth.currentUser?.id;
-    if (userId == null) {
-      throw const AuthException('User not authenticated');
-    }
-    return userId;
-  }
-
-  static const _conversationsQuery = '''
-    id,
-    type,
-    last_message_id,
-    last_message_at,
-    created_at,
-    conversation_participants(
-      id,
-      conversation_id,
-      user_id,
-      unread_count,
-      last_read_at,
-      joined_at,
-      user:users(
-        id,
-        username,
-        avatar_url,
-        full_name,
-        is_online,
-        last_seen
+  static const _q = '''
+    SELECT
+      c.id,
+      c.type,
+      c.last_message_at,
+      c.created_at,
+      m.content             AS last_message_content,
+      m.message_type        AS last_message_type,
+      m.sender_id           AS last_message_sender_id,
+      cp_me.unread_count,
+      u.id                  AS other_user_id,
+      u.username,
+      u.avatar_url,
+      u.full_name,
+      u.is_online,
+      u.last_seen,
+      COALESCE(lo.draft, '')        AS draft,
+      COALESCE(lo.is_muted, 0)      AS is_muted,
+      COALESCE(lo.scroll_offset, 0) AS scroll_offset
+    FROM conversations c
+    JOIN conversation_participants cp_me
+      ON cp_me.conversation_id = c.id
+     AND cp_me.user_id = ?
+    LEFT JOIN messages m
+      ON m.id = c.last_message_id
+    LEFT JOIN users u
+      ON u.id = (
+        SELECT user_id
+        FROM conversation_participants
+        WHERE conversation_id = c.id
+          AND user_id != ?
+        LIMIT 1
       )
-    ),
-    last_message:messages!fk_last_message(
-      id,
-      content,
-      message_type
-    )
+    LEFT JOIN local_conversation_state lo
+      ON lo.conversation_id = c.id
+    ORDER BY c.last_message_at DESC
   ''';
 
-  // ─────────────────────────────────────────────
-
-  @override
   Future<List<ConversationModel>> getConversations() async {
-    final userId = _currentUserId;
-
-    final participations = await _supabase
-        .from('conversation_participants')
-        .select('conversation_id')
-        .eq('user_id', userId);
-
-    final ids = (participations as List)
-        .map((row) => row['conversation_id'] as String)
-        .toList();
-
-    if (ids.isEmpty) return [];
-
-    _myConversationIds
-      ..clear()
-      ..addAll(ids);
-
-    final response = await _supabase
-        .from('conversations')
-        .select(_conversationsQuery)
-        .inFilter('id', ids)
-        .order('last_message_at', ascending: false);
-
-    return (response as List)
-        .map((json) => _mapToModel(json as Map<String, dynamic>))
+    final result = await _db.execute(_q, [_userId, _userId]);
+    return result
+        .map((row) => ConversationModel.fromMap(row))
         .toList();
   }
 
-  // ─────────────────────────────────────────────
-
-  @override
-  Stream<ConversationChange> watchChanges() {
-    final userId = _currentUserId;
-    final controller = StreamController<ConversationChange>.broadcast();
-
-    _channel?.unsubscribe();
-
-    _channel = _supabase
-        .channel('conversations_realtime_$userId')
-        // ✅ رسالة جديدة
-        .onPostgresChanges(
-          event: PostgresChangeEvent.insert,
-          schema: 'public',
-          table: 'messages',
-          callback: (payload) => _onNewMessage(payload, userId, controller),
-        )
-        // ✅ unread_count
-        .onPostgresChanges(
-          event: PostgresChangeEvent.update,
-          schema: 'public',
-          table: 'conversation_participants',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'user_id',
-            value: userId,
-          ),
-          callback: (payload) => _onParticipantUpdated(payload, controller),
-        )
-        // ✅ 🟢 محادثة جديدة (الحل)
-        .onPostgresChanges(
-          event: PostgresChangeEvent.insert,
-          schema: 'public',
-          table: 'conversation_participants',
-          filter: PostgresChangeFilter(
-            type: PostgresChangeFilterType.eq,
-            column: 'user_id',
-            value: userId,
-          ),
-          callback: (payload) => _onNewConversation(payload, controller),
-        )
-        // ✅ حالة المستخدم
-        .onPostgresChanges(
-          event: PostgresChangeEvent.update,
-          schema: 'public',
-          table: 'users',
-          callback: (payload) => _onUserPresenceChanged(payload, controller),
-        )
-        .subscribe();
-
-    controller.onCancel = () {
-      _channel?.unsubscribe();
-      _channel = null;
-    };
-
-    return controller.stream;
+  Stream<List<ConversationModel>> watchConversations() {
+    return _db
+        .watch(_q, parameters: [_userId, _userId])
+        .map((result) => result
+            .map((row) => ConversationModel.fromMap(row))
+            .toList());
   }
 
-  // ─────────────────────────────────────────────
-  // Handlers
-  // ─────────────────────────────────────────────
-
-  Future<void> _onNewMessage(
-    PostgresChangePayload payload,
-    String currentUserId,
-    StreamController<ConversationChange> controller,
-  ) async {
-    try {
-      final row = payload.newRecord;
-      final senderId = row['sender_id'] as String?;
-      final conversationId = row['conversation_id'] as String?;
-
-      if (conversationId == null) return;
-
-      if (_myConversationIds.isEmpty) {
-        final isMember = await _isParticipant(conversationId, currentUserId);
-        if (!isMember) return;
-        _myConversationIds.add(conversationId);
-      } else {
-        if (!_myConversationIds.contains(conversationId)) return;
-      }
-
-      controller.add(
-        ConversationChange.newMessage(
-          conversationId: conversationId,
-          content: row['content'] as String? ?? '',
-          messageType: row['message_type'] as String? ?? 'text',
-          sentAt: DateTime.parse(row['created_at'] as String),
-          senderId: senderId ?? '',
-        ),
-      );
-    } catch (_) {}
-  }
-
-  void _onParticipantUpdated(
-    PostgresChangePayload payload,
-    StreamController<ConversationChange> controller,
-  ) {
-    final row = payload.newRecord;
-    final conversationId = row['conversation_id'] as String?;
-    final unreadCount = row['unread_count'] as int?;
-
-    if (conversationId == null || unreadCount == null) return;
-
-    controller.add(
-      ConversationChange.unreadCountChanged(
-        conversationId: conversationId,
-        unreadCount: unreadCount,
-      ),
+  Future<void> sendMessage({
+    required String conversationId,
+    required String content,
+    String messageType = 'text',
+    String? replyToId,
+  }) async {
+    await _db.execute(
+      '''INSERT INTO messages
+           (id, conversation_id, sender_id, content, message_type, reply_to_id, status, created_at)
+         VALUES
+           (uuid(), ?, ?, ?, ?, ?, 'sent', datetime('now'))''',
+      [conversationId, _userId, content, messageType, replyToId],
     );
   }
 
-  // 🟢 الحل الحقيقي هنا
-  Future<void> _onNewConversation(
-    PostgresChangePayload payload,
-    StreamController<ConversationChange> controller,
-  ) async {
-    try {
-      final row = payload.newRecord;
-      final conversationId = row['conversation_id'] as String?;
-
-      if (conversationId == null) return;
-
-      _myConversationIds.add(conversationId);
-
-      final response = await _supabase
-          .from('conversations')
-          .select(_conversationsQuery)
-          .eq('id', conversationId)
-          .maybeSingle();
-
-      if (response == null) return;
-
-      final conversation = _mapToModel(response);
-
-      controller.add(ConversationChange.conversationAdded(conversation));
-    } catch (_) {}
-  }
-
-  void _onUserPresenceChanged(
-    PostgresChangePayload payload,
-    StreamController<ConversationChange> controller,
-  ) {
-    final row = payload.newRecord;
-    final userId = row['id'] as String?;
-    final isOnline = row['is_online'] as bool?;
-    final lastSeenRaw = row['last_seen'] as String?;
-
-    if (userId == null || isOnline == null || lastSeenRaw == null) {
-      return;
-    }
-
-    controller.add(
-      ConversationChange.userPresenceChanged(
-        userId: userId,
-        isOnline: isOnline,
-        lastSeen: DateTime.parse(lastSeenRaw),
-      ),
+  Future<void> markAsRead(String conversationId) async {
+    await _db.execute(
+      '''UPDATE conversation_participants
+         SET unread_count = 0, last_read_at = datetime('now')
+         WHERE conversation_id = ? AND user_id = ?''',
+      [conversationId, _userId],
     );
   }
 
-  // ─────────────────────────────────────────────
-
-  Future<bool> _isParticipant(String conversationId, String userId) async {
-    try {
-      final result = await _supabase
-          .from('conversation_participants')
-          .select('id')
-          .eq('conversation_id', conversationId)
-          .eq('user_id', userId)
-          .maybeSingle();
-      return result != null;
-    } catch (_) {
-      return false;
-    }
+  Future<void> saveDraft(String conversationId, String text) async {
+    await _db.execute(
+      '''INSERT INTO local_conversation_state (id, conversation_id, draft)
+         VALUES (uuid(), ?, ?)
+         ON CONFLICT (conversation_id) DO UPDATE SET draft = excluded.draft''',
+      [conversationId, text],
+    );
   }
 
-  ConversationModel _mapToModel(Map<String, dynamic> json) {
-    final raw = json['last_message'];
-
-    Map<String, dynamic>? lastMsg;
-    if (raw is List && raw.isNotEmpty) {
-      lastMsg = raw[0] as Map<String, dynamic>?;
-    } else if (raw is Map<String, dynamic>) {
-      lastMsg = raw;
-    }
-
-    if (lastMsg != null) {
-      json['last_message_content'] = lastMsg['content'];
-      json['last_message_type'] = lastMsg['message_type'];
-    }
-
-    json.remove('last_message');
-
-    return ConversationModel.fromJson(json);
-  }
-
-  // ─────────────────────────────────────────────
-
-  @override
-  Future<void> dispose() async {
-    await _channel?.unsubscribe();
-    _channel = null;
-    _myConversationIds.clear();
+  Future<void> toggleMute(String conversationId, {required bool muted}) async {
+    await _db.execute(
+      '''INSERT INTO local_conversation_state (id, conversation_id, is_muted)
+         VALUES (uuid(), ?, ?)
+         ON CONFLICT (conversation_id) DO UPDATE SET is_muted = excluded.is_muted''',
+      [conversationId, muted ? 1 : 0],
+    );
   }
 }

@@ -55,18 +55,17 @@ extension ConversationsEventPatterns on ConversationsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _LoadConversations value)?  loadConversations,TResult Function( _RefreshConversations value)?  refreshConversations,TResult Function( _StartWatching value)?  startWatching,TResult Function( _ConversationAdded value)?  conversationAdded,TResult Function( _NewMessageReceived value)?  newMessageReceived,TResult Function( _UnreadCountChanged value)?  unreadCountChanged,TResult Function( _UserPresenceChanged value)?  userPresenceChanged,TResult Function( _WatchError value)?  watchError,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Load value)?  load,TResult Function( _Refresh value)?  refresh,TResult Function( _StartWatching value)?  startWatching,TResult Function( _Updated value)?  updated,TResult Function( _Error value)?  error,TResult Function( _SendMessage value)?  sendMessage,TResult Function( _MarkAsRead value)?  markAsRead,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _LoadConversations() when loadConversations != null:
-return loadConversations(_that);case _RefreshConversations() when refreshConversations != null:
-return refreshConversations(_that);case _StartWatching() when startWatching != null:
-return startWatching(_that);case _ConversationAdded() when conversationAdded != null:
-return conversationAdded(_that);case _NewMessageReceived() when newMessageReceived != null:
-return newMessageReceived(_that);case _UnreadCountChanged() when unreadCountChanged != null:
-return unreadCountChanged(_that);case _UserPresenceChanged() when userPresenceChanged != null:
-return userPresenceChanged(_that);case _WatchError() when watchError != null:
-return watchError(_that);case _:
+case _Load() when load != null:
+return load(_that);case _Refresh() when refresh != null:
+return refresh(_that);case _StartWatching() when startWatching != null:
+return startWatching(_that);case _Updated() when updated != null:
+return updated(_that);case _Error() when error != null:
+return error(_that);case _SendMessage() when sendMessage != null:
+return sendMessage(_that);case _MarkAsRead() when markAsRead != null:
+return markAsRead(_that);case _:
   return orElse();
 
 }
@@ -84,18 +83,17 @@ return watchError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _LoadConversations value)  loadConversations,required TResult Function( _RefreshConversations value)  refreshConversations,required TResult Function( _StartWatching value)  startWatching,required TResult Function( _ConversationAdded value)  conversationAdded,required TResult Function( _NewMessageReceived value)  newMessageReceived,required TResult Function( _UnreadCountChanged value)  unreadCountChanged,required TResult Function( _UserPresenceChanged value)  userPresenceChanged,required TResult Function( _WatchError value)  watchError,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Load value)  load,required TResult Function( _Refresh value)  refresh,required TResult Function( _StartWatching value)  startWatching,required TResult Function( _Updated value)  updated,required TResult Function( _Error value)  error,required TResult Function( _SendMessage value)  sendMessage,required TResult Function( _MarkAsRead value)  markAsRead,}){
 final _that = this;
 switch (_that) {
-case _LoadConversations():
-return loadConversations(_that);case _RefreshConversations():
-return refreshConversations(_that);case _StartWatching():
-return startWatching(_that);case _ConversationAdded():
-return conversationAdded(_that);case _NewMessageReceived():
-return newMessageReceived(_that);case _UnreadCountChanged():
-return unreadCountChanged(_that);case _UserPresenceChanged():
-return userPresenceChanged(_that);case _WatchError():
-return watchError(_that);case _:
+case _Load():
+return load(_that);case _Refresh():
+return refresh(_that);case _StartWatching():
+return startWatching(_that);case _Updated():
+return updated(_that);case _Error():
+return error(_that);case _SendMessage():
+return sendMessage(_that);case _MarkAsRead():
+return markAsRead(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -112,18 +110,17 @@ return watchError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _LoadConversations value)?  loadConversations,TResult? Function( _RefreshConversations value)?  refreshConversations,TResult? Function( _StartWatching value)?  startWatching,TResult? Function( _ConversationAdded value)?  conversationAdded,TResult? Function( _NewMessageReceived value)?  newMessageReceived,TResult? Function( _UnreadCountChanged value)?  unreadCountChanged,TResult? Function( _UserPresenceChanged value)?  userPresenceChanged,TResult? Function( _WatchError value)?  watchError,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Load value)?  load,TResult? Function( _Refresh value)?  refresh,TResult? Function( _StartWatching value)?  startWatching,TResult? Function( _Updated value)?  updated,TResult? Function( _Error value)?  error,TResult? Function( _SendMessage value)?  sendMessage,TResult? Function( _MarkAsRead value)?  markAsRead,}){
 final _that = this;
 switch (_that) {
-case _LoadConversations() when loadConversations != null:
-return loadConversations(_that);case _RefreshConversations() when refreshConversations != null:
-return refreshConversations(_that);case _StartWatching() when startWatching != null:
-return startWatching(_that);case _ConversationAdded() when conversationAdded != null:
-return conversationAdded(_that);case _NewMessageReceived() when newMessageReceived != null:
-return newMessageReceived(_that);case _UnreadCountChanged() when unreadCountChanged != null:
-return unreadCountChanged(_that);case _UserPresenceChanged() when userPresenceChanged != null:
-return userPresenceChanged(_that);case _WatchError() when watchError != null:
-return watchError(_that);case _:
+case _Load() when load != null:
+return load(_that);case _Refresh() when refresh != null:
+return refresh(_that);case _StartWatching() when startWatching != null:
+return startWatching(_that);case _Updated() when updated != null:
+return updated(_that);case _Error() when error != null:
+return error(_that);case _SendMessage() when sendMessage != null:
+return sendMessage(_that);case _MarkAsRead() when markAsRead != null:
+return markAsRead(_that);case _:
   return null;
 
 }
@@ -140,17 +137,16 @@ return watchError(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loadConversations,TResult Function()?  refreshConversations,TResult Function()?  startWatching,TResult Function( ConversationEntity conversation)?  conversationAdded,TResult Function( String conversationId,  String content,  String messageType,  DateTime sentAt,  String senderId)?  newMessageReceived,TResult Function( String conversationId,  int unreadCount)?  unreadCountChanged,TResult Function( String userId,  bool isOnline,  DateTime lastSeen)?  userPresenceChanged,TResult Function( Failure failure)?  watchError,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  load,TResult Function()?  refresh,TResult Function()?  startWatching,TResult Function( List<ConversationEntity> conversations)?  updated,TResult Function( String message)?  error,TResult Function( String conversationId,  String content,  String messageType,  String? replyToId)?  sendMessage,TResult Function( String conversationId)?  markAsRead,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _LoadConversations() when loadConversations != null:
-return loadConversations();case _RefreshConversations() when refreshConversations != null:
-return refreshConversations();case _StartWatching() when startWatching != null:
-return startWatching();case _ConversationAdded() when conversationAdded != null:
-return conversationAdded(_that.conversation);case _NewMessageReceived() when newMessageReceived != null:
-return newMessageReceived(_that.conversationId,_that.content,_that.messageType,_that.sentAt,_that.senderId);case _UnreadCountChanged() when unreadCountChanged != null:
-return unreadCountChanged(_that.conversationId,_that.unreadCount);case _UserPresenceChanged() when userPresenceChanged != null:
-return userPresenceChanged(_that.userId,_that.isOnline,_that.lastSeen);case _WatchError() when watchError != null:
-return watchError(_that.failure);case _:
+case _Load() when load != null:
+return load();case _Refresh() when refresh != null:
+return refresh();case _StartWatching() when startWatching != null:
+return startWatching();case _Updated() when updated != null:
+return updated(_that.conversations);case _Error() when error != null:
+return error(_that.message);case _SendMessage() when sendMessage != null:
+return sendMessage(_that.conversationId,_that.content,_that.messageType,_that.replyToId);case _MarkAsRead() when markAsRead != null:
+return markAsRead(_that.conversationId);case _:
   return orElse();
 
 }
@@ -168,17 +164,16 @@ return watchError(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loadConversations,required TResult Function()  refreshConversations,required TResult Function()  startWatching,required TResult Function( ConversationEntity conversation)  conversationAdded,required TResult Function( String conversationId,  String content,  String messageType,  DateTime sentAt,  String senderId)  newMessageReceived,required TResult Function( String conversationId,  int unreadCount)  unreadCountChanged,required TResult Function( String userId,  bool isOnline,  DateTime lastSeen)  userPresenceChanged,required TResult Function( Failure failure)  watchError,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  load,required TResult Function()  refresh,required TResult Function()  startWatching,required TResult Function( List<ConversationEntity> conversations)  updated,required TResult Function( String message)  error,required TResult Function( String conversationId,  String content,  String messageType,  String? replyToId)  sendMessage,required TResult Function( String conversationId)  markAsRead,}) {final _that = this;
 switch (_that) {
-case _LoadConversations():
-return loadConversations();case _RefreshConversations():
-return refreshConversations();case _StartWatching():
-return startWatching();case _ConversationAdded():
-return conversationAdded(_that.conversation);case _NewMessageReceived():
-return newMessageReceived(_that.conversationId,_that.content,_that.messageType,_that.sentAt,_that.senderId);case _UnreadCountChanged():
-return unreadCountChanged(_that.conversationId,_that.unreadCount);case _UserPresenceChanged():
-return userPresenceChanged(_that.userId,_that.isOnline,_that.lastSeen);case _WatchError():
-return watchError(_that.failure);case _:
+case _Load():
+return load();case _Refresh():
+return refresh();case _StartWatching():
+return startWatching();case _Updated():
+return updated(_that.conversations);case _Error():
+return error(_that.message);case _SendMessage():
+return sendMessage(_that.conversationId,_that.content,_that.messageType,_that.replyToId);case _MarkAsRead():
+return markAsRead(_that.conversationId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -195,17 +190,16 @@ return watchError(_that.failure);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loadConversations,TResult? Function()?  refreshConversations,TResult? Function()?  startWatching,TResult? Function( ConversationEntity conversation)?  conversationAdded,TResult? Function( String conversationId,  String content,  String messageType,  DateTime sentAt,  String senderId)?  newMessageReceived,TResult? Function( String conversationId,  int unreadCount)?  unreadCountChanged,TResult? Function( String userId,  bool isOnline,  DateTime lastSeen)?  userPresenceChanged,TResult? Function( Failure failure)?  watchError,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  load,TResult? Function()?  refresh,TResult? Function()?  startWatching,TResult? Function( List<ConversationEntity> conversations)?  updated,TResult? Function( String message)?  error,TResult? Function( String conversationId,  String content,  String messageType,  String? replyToId)?  sendMessage,TResult? Function( String conversationId)?  markAsRead,}) {final _that = this;
 switch (_that) {
-case _LoadConversations() when loadConversations != null:
-return loadConversations();case _RefreshConversations() when refreshConversations != null:
-return refreshConversations();case _StartWatching() when startWatching != null:
-return startWatching();case _ConversationAdded() when conversationAdded != null:
-return conversationAdded(_that.conversation);case _NewMessageReceived() when newMessageReceived != null:
-return newMessageReceived(_that.conversationId,_that.content,_that.messageType,_that.sentAt,_that.senderId);case _UnreadCountChanged() when unreadCountChanged != null:
-return unreadCountChanged(_that.conversationId,_that.unreadCount);case _UserPresenceChanged() when userPresenceChanged != null:
-return userPresenceChanged(_that.userId,_that.isOnline,_that.lastSeen);case _WatchError() when watchError != null:
-return watchError(_that.failure);case _:
+case _Load() when load != null:
+return load();case _Refresh() when refresh != null:
+return refresh();case _StartWatching() when startWatching != null:
+return startWatching();case _Updated() when updated != null:
+return updated(_that.conversations);case _Error() when error != null:
+return error(_that.message);case _SendMessage() when sendMessage != null:
+return sendMessage(_that.conversationId,_that.content,_that.messageType,_that.replyToId);case _MarkAsRead() when markAsRead != null:
+return markAsRead(_that.conversationId);case _:
   return null;
 
 }
@@ -216,8 +210,8 @@ return watchError(_that.failure);case _:
 /// @nodoc
 
 
-class _LoadConversations implements ConversationsEvent {
-  const _LoadConversations();
+class _Load implements ConversationsEvent {
+  const _Load();
   
 
 
@@ -227,7 +221,7 @@ class _LoadConversations implements ConversationsEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _LoadConversations);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Load);
 }
 
 
@@ -236,7 +230,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ConversationsEvent.loadConversations()';
+  return 'ConversationsEvent.load()';
 }
 
 
@@ -248,8 +242,8 @@ String toString() {
 /// @nodoc
 
 
-class _RefreshConversations implements ConversationsEvent {
-  const _RefreshConversations();
+class _Refresh implements ConversationsEvent {
+  const _Refresh();
   
 
 
@@ -259,7 +253,7 @@ class _RefreshConversations implements ConversationsEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RefreshConversations);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Refresh);
 }
 
 
@@ -268,7 +262,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'ConversationsEvent.refreshConversations()';
+  return 'ConversationsEvent.refresh()';
 }
 
 
@@ -312,122 +306,115 @@ String toString() {
 /// @nodoc
 
 
-class _ConversationAdded implements ConversationsEvent {
-  const _ConversationAdded({required this.conversation});
+class _Updated implements ConversationsEvent {
+  const _Updated(final  List<ConversationEntity> conversations): _conversations = conversations;
   
 
- final  ConversationEntity conversation;
+ final  List<ConversationEntity> _conversations;
+ List<ConversationEntity> get conversations {
+  if (_conversations is EqualUnmodifiableListView) return _conversations;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_conversations);
+}
+
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$ConversationAddedCopyWith<_ConversationAdded> get copyWith => __$ConversationAddedCopyWithImpl<_ConversationAdded>(this, _$identity);
+_$UpdatedCopyWith<_Updated> get copyWith => __$UpdatedCopyWithImpl<_Updated>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ConversationAdded&&(identical(other.conversation, conversation) || other.conversation == conversation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Updated&&const DeepCollectionEquality().equals(other._conversations, _conversations));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,conversation);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_conversations));
 
 @override
 String toString() {
-  return 'ConversationsEvent.conversationAdded(conversation: $conversation)';
+  return 'ConversationsEvent.updated(conversations: $conversations)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$ConversationAddedCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
-  factory _$ConversationAddedCopyWith(_ConversationAdded value, $Res Function(_ConversationAdded) _then) = __$ConversationAddedCopyWithImpl;
+abstract mixin class _$UpdatedCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
+  factory _$UpdatedCopyWith(_Updated value, $Res Function(_Updated) _then) = __$UpdatedCopyWithImpl;
 @useResult
 $Res call({
- ConversationEntity conversation
+ List<ConversationEntity> conversations
 });
 
 
-$ConversationEntityCopyWith<$Res> get conversation;
+
 
 }
 /// @nodoc
-class __$ConversationAddedCopyWithImpl<$Res>
-    implements _$ConversationAddedCopyWith<$Res> {
-  __$ConversationAddedCopyWithImpl(this._self, this._then);
+class __$UpdatedCopyWithImpl<$Res>
+    implements _$UpdatedCopyWith<$Res> {
+  __$UpdatedCopyWithImpl(this._self, this._then);
 
-  final _ConversationAdded _self;
-  final $Res Function(_ConversationAdded) _then;
+  final _Updated _self;
+  final $Res Function(_Updated) _then;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? conversation = null,}) {
-  return _then(_ConversationAdded(
-conversation: null == conversation ? _self.conversation : conversation // ignore: cast_nullable_to_non_nullable
-as ConversationEntity,
+@pragma('vm:prefer-inline') $Res call({Object? conversations = null,}) {
+  return _then(_Updated(
+null == conversations ? _self._conversations : conversations // ignore: cast_nullable_to_non_nullable
+as List<ConversationEntity>,
   ));
 }
 
-/// Create a copy of ConversationsEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$ConversationEntityCopyWith<$Res> get conversation {
-  
-  return $ConversationEntityCopyWith<$Res>(_self.conversation, (value) {
-    return _then(_self.copyWith(conversation: value));
-  });
-}
+
 }
 
 /// @nodoc
 
 
-class _NewMessageReceived implements ConversationsEvent {
-  const _NewMessageReceived({required this.conversationId, required this.content, required this.messageType, required this.sentAt, required this.senderId});
+class _Error implements ConversationsEvent {
+  const _Error(this.message);
   
 
- final  String conversationId;
- final  String content;
- final  String messageType;
- final  DateTime sentAt;
- final  String senderId;
+ final  String message;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$NewMessageReceivedCopyWith<_NewMessageReceived> get copyWith => __$NewMessageReceivedCopyWithImpl<_NewMessageReceived>(this, _$identity);
+_$ErrorCopyWith<_Error> get copyWith => __$ErrorCopyWithImpl<_Error>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _NewMessageReceived&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&(identical(other.content, content) || other.content == content)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.sentAt, sentAt) || other.sentAt == sentAt)&&(identical(other.senderId, senderId) || other.senderId == senderId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Error&&(identical(other.message, message) || other.message == message));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,conversationId,content,messageType,sentAt,senderId);
+int get hashCode => Object.hash(runtimeType,message);
 
 @override
 String toString() {
-  return 'ConversationsEvent.newMessageReceived(conversationId: $conversationId, content: $content, messageType: $messageType, sentAt: $sentAt, senderId: $senderId)';
+  return 'ConversationsEvent.error(message: $message)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$NewMessageReceivedCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
-  factory _$NewMessageReceivedCopyWith(_NewMessageReceived value, $Res Function(_NewMessageReceived) _then) = __$NewMessageReceivedCopyWithImpl;
+abstract mixin class _$ErrorCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
+  factory _$ErrorCopyWith(_Error value, $Res Function(_Error) _then) = __$ErrorCopyWithImpl;
 @useResult
 $Res call({
- String conversationId, String content, String messageType, DateTime sentAt, String senderId
+ String message
 });
 
 
@@ -435,22 +422,18 @@ $Res call({
 
 }
 /// @nodoc
-class __$NewMessageReceivedCopyWithImpl<$Res>
-    implements _$NewMessageReceivedCopyWith<$Res> {
-  __$NewMessageReceivedCopyWithImpl(this._self, this._then);
+class __$ErrorCopyWithImpl<$Res>
+    implements _$ErrorCopyWith<$Res> {
+  __$ErrorCopyWithImpl(this._self, this._then);
 
-  final _NewMessageReceived _self;
-  final $Res Function(_NewMessageReceived) _then;
+  final _Error _self;
+  final $Res Function(_Error) _then;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,Object? content = null,Object? messageType = null,Object? sentAt = null,Object? senderId = null,}) {
-  return _then(_NewMessageReceived(
-conversationId: null == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
-as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
-as String,messageType: null == messageType ? _self.messageType : messageType // ignore: cast_nullable_to_non_nullable
-as String,sentAt: null == sentAt ? _self.sentAt : sentAt // ignore: cast_nullable_to_non_nullable
-as DateTime,senderId: null == senderId ? _self.senderId : senderId // ignore: cast_nullable_to_non_nullable
+@pragma('vm:prefer-inline') $Res call({Object? message = null,}) {
+  return _then(_Error(
+null == message ? _self.message : message // ignore: cast_nullable_to_non_nullable
 as String,
   ));
 }
@@ -461,44 +444,46 @@ as String,
 /// @nodoc
 
 
-class _UnreadCountChanged implements ConversationsEvent {
-  const _UnreadCountChanged({required this.conversationId, required this.unreadCount});
+class _SendMessage implements ConversationsEvent {
+  const _SendMessage({required this.conversationId, required this.content, this.messageType = 'text', this.replyToId});
   
 
  final  String conversationId;
- final  int unreadCount;
+ final  String content;
+@JsonKey() final  String messageType;
+ final  String? replyToId;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$UnreadCountChangedCopyWith<_UnreadCountChanged> get copyWith => __$UnreadCountChangedCopyWithImpl<_UnreadCountChanged>(this, _$identity);
+_$SendMessageCopyWith<_SendMessage> get copyWith => __$SendMessageCopyWithImpl<_SendMessage>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UnreadCountChanged&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&(identical(other.unreadCount, unreadCount) || other.unreadCount == unreadCount));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _SendMessage&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId)&&(identical(other.content, content) || other.content == content)&&(identical(other.messageType, messageType) || other.messageType == messageType)&&(identical(other.replyToId, replyToId) || other.replyToId == replyToId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,conversationId,unreadCount);
+int get hashCode => Object.hash(runtimeType,conversationId,content,messageType,replyToId);
 
 @override
 String toString() {
-  return 'ConversationsEvent.unreadCountChanged(conversationId: $conversationId, unreadCount: $unreadCount)';
+  return 'ConversationsEvent.sendMessage(conversationId: $conversationId, content: $content, messageType: $messageType, replyToId: $replyToId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$UnreadCountChangedCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
-  factory _$UnreadCountChangedCopyWith(_UnreadCountChanged value, $Res Function(_UnreadCountChanged) _then) = __$UnreadCountChangedCopyWithImpl;
+abstract mixin class _$SendMessageCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
+  factory _$SendMessageCopyWith(_SendMessage value, $Res Function(_SendMessage) _then) = __$SendMessageCopyWithImpl;
 @useResult
 $Res call({
- String conversationId, int unreadCount
+ String conversationId, String content, String messageType, String? replyToId
 });
 
 
@@ -506,20 +491,22 @@ $Res call({
 
 }
 /// @nodoc
-class __$UnreadCountChangedCopyWithImpl<$Res>
-    implements _$UnreadCountChangedCopyWith<$Res> {
-  __$UnreadCountChangedCopyWithImpl(this._self, this._then);
+class __$SendMessageCopyWithImpl<$Res>
+    implements _$SendMessageCopyWith<$Res> {
+  __$SendMessageCopyWithImpl(this._self, this._then);
 
-  final _UnreadCountChanged _self;
-  final $Res Function(_UnreadCountChanged) _then;
+  final _SendMessage _self;
+  final $Res Function(_SendMessage) _then;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,Object? unreadCount = null,}) {
-  return _then(_UnreadCountChanged(
+@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,Object? content = null,Object? messageType = null,Object? replyToId = freezed,}) {
+  return _then(_SendMessage(
 conversationId: null == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
-as String,unreadCount: null == unreadCount ? _self.unreadCount : unreadCount // ignore: cast_nullable_to_non_nullable
-as int,
+as String,content: null == content ? _self.content : content // ignore: cast_nullable_to_non_nullable
+as String,messageType: null == messageType ? _self.messageType : messageType // ignore: cast_nullable_to_non_nullable
+as String,replyToId: freezed == replyToId ? _self.replyToId : replyToId // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -529,45 +516,43 @@ as int,
 /// @nodoc
 
 
-class _UserPresenceChanged implements ConversationsEvent {
-  const _UserPresenceChanged({required this.userId, required this.isOnline, required this.lastSeen});
+class _MarkAsRead implements ConversationsEvent {
+  const _MarkAsRead(this.conversationId);
   
 
- final  String userId;
- final  bool isOnline;
- final  DateTime lastSeen;
+ final  String conversationId;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$UserPresenceChangedCopyWith<_UserPresenceChanged> get copyWith => __$UserPresenceChangedCopyWithImpl<_UserPresenceChanged>(this, _$identity);
+_$MarkAsReadCopyWith<_MarkAsRead> get copyWith => __$MarkAsReadCopyWithImpl<_MarkAsRead>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _UserPresenceChanged&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.isOnline, isOnline) || other.isOnline == isOnline)&&(identical(other.lastSeen, lastSeen) || other.lastSeen == lastSeen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _MarkAsRead&&(identical(other.conversationId, conversationId) || other.conversationId == conversationId));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,userId,isOnline,lastSeen);
+int get hashCode => Object.hash(runtimeType,conversationId);
 
 @override
 String toString() {
-  return 'ConversationsEvent.userPresenceChanged(userId: $userId, isOnline: $isOnline, lastSeen: $lastSeen)';
+  return 'ConversationsEvent.markAsRead(conversationId: $conversationId)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class _$UserPresenceChangedCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
-  factory _$UserPresenceChangedCopyWith(_UserPresenceChanged value, $Res Function(_UserPresenceChanged) _then) = __$UserPresenceChangedCopyWithImpl;
+abstract mixin class _$MarkAsReadCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
+  factory _$MarkAsReadCopyWith(_MarkAsRead value, $Res Function(_MarkAsRead) _then) = __$MarkAsReadCopyWithImpl;
 @useResult
 $Res call({
- String userId, bool isOnline, DateTime lastSeen
+ String conversationId
 });
 
 
@@ -575,87 +560,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$UserPresenceChangedCopyWithImpl<$Res>
-    implements _$UserPresenceChangedCopyWith<$Res> {
-  __$UserPresenceChangedCopyWithImpl(this._self, this._then);
+class __$MarkAsReadCopyWithImpl<$Res>
+    implements _$MarkAsReadCopyWith<$Res> {
+  __$MarkAsReadCopyWithImpl(this._self, this._then);
 
-  final _UserPresenceChanged _self;
-  final $Res Function(_UserPresenceChanged) _then;
-
-/// Create a copy of ConversationsEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? isOnline = null,Object? lastSeen = null,}) {
-  return _then(_UserPresenceChanged(
-userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
-as String,isOnline: null == isOnline ? _self.isOnline : isOnline // ignore: cast_nullable_to_non_nullable
-as bool,lastSeen: null == lastSeen ? _self.lastSeen : lastSeen // ignore: cast_nullable_to_non_nullable
-as DateTime,
-  ));
-}
-
-
-}
-
-/// @nodoc
-
-
-class _WatchError implements ConversationsEvent {
-  const _WatchError(this.failure);
-  
-
- final  Failure failure;
+  final _MarkAsRead _self;
+  final $Res Function(_MarkAsRead) _then;
 
 /// Create a copy of ConversationsEvent
 /// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$WatchErrorCopyWith<_WatchError> get copyWith => __$WatchErrorCopyWithImpl<_WatchError>(this, _$identity);
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _WatchError&&(identical(other.failure, failure) || other.failure == failure));
-}
-
-
-@override
-int get hashCode => Object.hash(runtimeType,failure);
-
-@override
-String toString() {
-  return 'ConversationsEvent.watchError(failure: $failure)';
-}
-
-
-}
-
-/// @nodoc
-abstract mixin class _$WatchErrorCopyWith<$Res> implements $ConversationsEventCopyWith<$Res> {
-  factory _$WatchErrorCopyWith(_WatchError value, $Res Function(_WatchError) _then) = __$WatchErrorCopyWithImpl;
-@useResult
-$Res call({
- Failure failure
-});
-
-
-
-
-}
-/// @nodoc
-class __$WatchErrorCopyWithImpl<$Res>
-    implements _$WatchErrorCopyWith<$Res> {
-  __$WatchErrorCopyWithImpl(this._self, this._then);
-
-  final _WatchError _self;
-  final $Res Function(_WatchError) _then;
-
-/// Create a copy of ConversationsEvent
-/// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
-  return _then(_WatchError(
-null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure,
+@pragma('vm:prefer-inline') $Res call({Object? conversationId = null,}) {
+  return _then(_MarkAsRead(
+null == conversationId ? _self.conversationId : conversationId // ignore: cast_nullable_to_non_nullable
+as String,
   ));
 }
 
@@ -706,16 +623,16 @@ extension ConversationsStatePatterns on ConversationsState {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( _Initial value)?  initial,TResult Function( _Loading value)?  loading,TResult Function( _Loaded value)?  loaded,TResult Function( _Failure value)?  failure,TResult Function( WatchFailure value)?  watchFailure,TResult Function( _Empty value)?  empty,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( Initial value)?  initial,TResult Function( Loading value)?  loading,TResult Function( Loaded value)?  loaded,TResult Function( Empty value)?  empty,TResult Function( Failure value)?  failure,TResult Function( WatchFailure value)?  watchFailure,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Failure() when failure != null:
+case Initial() when initial != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case Loaded() when loaded != null:
+return loaded(_that);case Empty() when empty != null:
+return empty(_that);case Failure() when failure != null:
 return failure(_that);case WatchFailure() when watchFailure != null:
-return watchFailure(_that);case _Empty() when empty != null:
-return empty(_that);case _:
+return watchFailure(_that);case _:
   return orElse();
 
 }
@@ -733,16 +650,16 @@ return empty(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( _Initial value)  initial,required TResult Function( _Loading value)  loading,required TResult Function( _Loaded value)  loaded,required TResult Function( _Failure value)  failure,required TResult Function( WatchFailure value)  watchFailure,required TResult Function( _Empty value)  empty,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( Initial value)  initial,required TResult Function( Loading value)  loading,required TResult Function( Loaded value)  loaded,required TResult Function( Empty value)  empty,required TResult Function( Failure value)  failure,required TResult Function( WatchFailure value)  watchFailure,}){
 final _that = this;
 switch (_that) {
-case _Initial():
-return initial(_that);case _Loading():
-return loading(_that);case _Loaded():
-return loaded(_that);case _Failure():
+case Initial():
+return initial(_that);case Loading():
+return loading(_that);case Loaded():
+return loaded(_that);case Empty():
+return empty(_that);case Failure():
 return failure(_that);case WatchFailure():
-return watchFailure(_that);case _Empty():
-return empty(_that);case _:
+return watchFailure(_that);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -759,16 +676,16 @@ return empty(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( _Initial value)?  initial,TResult? Function( _Loading value)?  loading,TResult? Function( _Loaded value)?  loaded,TResult? Function( _Failure value)?  failure,TResult? Function( WatchFailure value)?  watchFailure,TResult? Function( _Empty value)?  empty,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( Initial value)?  initial,TResult? Function( Loading value)?  loading,TResult? Function( Loaded value)?  loaded,TResult? Function( Empty value)?  empty,TResult? Function( Failure value)?  failure,TResult? Function( WatchFailure value)?  watchFailure,}){
 final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial(_that);case _Loading() when loading != null:
-return loading(_that);case _Loaded() when loaded != null:
-return loaded(_that);case _Failure() when failure != null:
+case Initial() when initial != null:
+return initial(_that);case Loading() when loading != null:
+return loading(_that);case Loaded() when loaded != null:
+return loaded(_that);case Empty() when empty != null:
+return empty(_that);case Failure() when failure != null:
 return failure(_that);case WatchFailure() when watchFailure != null:
-return watchFailure(_that);case _Empty() when empty != null:
-return empty(_that);case _:
+return watchFailure(_that);case _:
   return null;
 
 }
@@ -785,15 +702,15 @@ return empty(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ConversationEntity> conversations,  bool isRefreshing)?  loaded,TResult Function( Failure failure)?  failure,TResult Function( List<ConversationEntity> conversations,  Failure failure)?  watchFailure,TResult Function()?  empty,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ConversationEntity> conversations,  bool isRefreshing)?  loaded,TResult Function()?  empty,TResult Function( String failure)?  failure,TResult Function( List<ConversationEntity> conversations,  String failure)?  watchFailure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.conversations,_that.isRefreshing);case _Failure() when failure != null:
+case Initial() when initial != null:
+return initial();case Loading() when loading != null:
+return loading();case Loaded() when loaded != null:
+return loaded(_that.conversations,_that.isRefreshing);case Empty() when empty != null:
+return empty();case Failure() when failure != null:
 return failure(_that.failure);case WatchFailure() when watchFailure != null:
-return watchFailure(_that.conversations,_that.failure);case _Empty() when empty != null:
-return empty();case _:
+return watchFailure(_that.conversations,_that.failure);case _:
   return orElse();
 
 }
@@ -811,15 +728,15 @@ return empty();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ConversationEntity> conversations,  bool isRefreshing)  loaded,required TResult Function( Failure failure)  failure,required TResult Function( List<ConversationEntity> conversations,  Failure failure)  watchFailure,required TResult Function()  empty,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ConversationEntity> conversations,  bool isRefreshing)  loaded,required TResult Function()  empty,required TResult Function( String failure)  failure,required TResult Function( List<ConversationEntity> conversations,  String failure)  watchFailure,}) {final _that = this;
 switch (_that) {
-case _Initial():
-return initial();case _Loading():
-return loading();case _Loaded():
-return loaded(_that.conversations,_that.isRefreshing);case _Failure():
+case Initial():
+return initial();case Loading():
+return loading();case Loaded():
+return loaded(_that.conversations,_that.isRefreshing);case Empty():
+return empty();case Failure():
 return failure(_that.failure);case WatchFailure():
-return watchFailure(_that.conversations,_that.failure);case _Empty():
-return empty();case _:
+return watchFailure(_that.conversations,_that.failure);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -836,15 +753,15 @@ return empty();case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ConversationEntity> conversations,  bool isRefreshing)?  loaded,TResult? Function( Failure failure)?  failure,TResult? Function( List<ConversationEntity> conversations,  Failure failure)?  watchFailure,TResult? Function()?  empty,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ConversationEntity> conversations,  bool isRefreshing)?  loaded,TResult? Function()?  empty,TResult? Function( String failure)?  failure,TResult? Function( List<ConversationEntity> conversations,  String failure)?  watchFailure,}) {final _that = this;
 switch (_that) {
-case _Initial() when initial != null:
-return initial();case _Loading() when loading != null:
-return loading();case _Loaded() when loaded != null:
-return loaded(_that.conversations,_that.isRefreshing);case _Failure() when failure != null:
+case Initial() when initial != null:
+return initial();case Loading() when loading != null:
+return loading();case Loaded() when loaded != null:
+return loaded(_that.conversations,_that.isRefreshing);case Empty() when empty != null:
+return empty();case Failure() when failure != null:
 return failure(_that.failure);case WatchFailure() when watchFailure != null:
-return watchFailure(_that.conversations,_that.failure);case _Empty() when empty != null:
-return empty();case _:
+return watchFailure(_that.conversations,_that.failure);case _:
   return null;
 
 }
@@ -855,8 +772,8 @@ return empty();case _:
 /// @nodoc
 
 
-class _Initial implements ConversationsState {
-  const _Initial();
+class Initial implements ConversationsState {
+  const Initial();
   
 
 
@@ -866,7 +783,7 @@ class _Initial implements ConversationsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Initial);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Initial);
 }
 
 
@@ -887,8 +804,8 @@ String toString() {
 /// @nodoc
 
 
-class _Loading implements ConversationsState {
-  const _Loading();
+class Loading implements ConversationsState {
+  const Loading();
   
 
 
@@ -898,7 +815,7 @@ class _Loading implements ConversationsState {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loading);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loading);
 }
 
 
@@ -919,8 +836,8 @@ String toString() {
 /// @nodoc
 
 
-class _Loaded implements ConversationsState {
-  const _Loaded({required final  List<ConversationEntity> conversations, this.isRefreshing = false}): _conversations = conversations;
+class Loaded implements ConversationsState {
+  const Loaded({required final  List<ConversationEntity> conversations, this.isRefreshing = false}): _conversations = conversations;
   
 
  final  List<ConversationEntity> _conversations;
@@ -936,13 +853,13 @@ class _Loaded implements ConversationsState {
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-_$LoadedCopyWith<_Loaded> get copyWith => __$LoadedCopyWithImpl<_Loaded>(this, _$identity);
+$LoadedCopyWith<Loaded> get copyWith => _$LoadedCopyWithImpl<Loaded>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Loaded&&const DeepCollectionEquality().equals(other._conversations, _conversations)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Loaded&&const DeepCollectionEquality().equals(other._conversations, _conversations)&&(identical(other.isRefreshing, isRefreshing) || other.isRefreshing == isRefreshing));
 }
 
 
@@ -958,8 +875,8 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$LoadedCopyWith<$Res> implements $ConversationsStateCopyWith<$Res> {
-  factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) _then) = __$LoadedCopyWithImpl;
+abstract mixin class $LoadedCopyWith<$Res> implements $ConversationsStateCopyWith<$Res> {
+  factory $LoadedCopyWith(Loaded value, $Res Function(Loaded) _then) = _$LoadedCopyWithImpl;
 @useResult
 $Res call({
  List<ConversationEntity> conversations, bool isRefreshing
@@ -970,17 +887,17 @@ $Res call({
 
 }
 /// @nodoc
-class __$LoadedCopyWithImpl<$Res>
-    implements _$LoadedCopyWith<$Res> {
-  __$LoadedCopyWithImpl(this._self, this._then);
+class _$LoadedCopyWithImpl<$Res>
+    implements $LoadedCopyWith<$Res> {
+  _$LoadedCopyWithImpl(this._self, this._then);
 
-  final _Loaded _self;
-  final $Res Function(_Loaded) _then;
+  final Loaded _self;
+  final $Res Function(Loaded) _then;
 
 /// Create a copy of ConversationsState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? conversations = null,Object? isRefreshing = null,}) {
-  return _then(_Loaded(
+  return _then(Loaded(
 conversations: null == conversations ? _self._conversations : conversations // ignore: cast_nullable_to_non_nullable
 as List<ConversationEntity>,isRefreshing: null == isRefreshing ? _self.isRefreshing : isRefreshing // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -993,23 +910,55 @@ as bool,
 /// @nodoc
 
 
-class _Failure implements ConversationsState {
-  const _Failure({required this.failure});
+class Empty implements ConversationsState {
+  const Empty();
   
 
- final  Failure failure;
 
-/// Create a copy of ConversationsState
-/// with the given fields replaced by the non-null parameter values.
-@JsonKey(includeFromJson: false, includeToJson: false)
-@pragma('vm:prefer-inline')
-_$FailureCopyWith<_Failure> get copyWith => __$FailureCopyWithImpl<_Failure>(this, _$identity);
+
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Failure&&(identical(other.failure, failure) || other.failure == failure));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Empty);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ConversationsState.empty()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class Failure implements ConversationsState {
+  const Failure({required this.failure});
+  
+
+ final  String failure;
+
+/// Create a copy of ConversationsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$FailureCopyWith<Failure> get copyWith => _$FailureCopyWithImpl<Failure>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Failure&&(identical(other.failure, failure) || other.failure == failure));
 }
 
 
@@ -1025,11 +974,11 @@ String toString() {
 }
 
 /// @nodoc
-abstract mixin class _$FailureCopyWith<$Res> implements $ConversationsStateCopyWith<$Res> {
-  factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) _then) = __$FailureCopyWithImpl;
+abstract mixin class $FailureCopyWith<$Res> implements $ConversationsStateCopyWith<$Res> {
+  factory $FailureCopyWith(Failure value, $Res Function(Failure) _then) = _$FailureCopyWithImpl;
 @useResult
 $Res call({
- Failure failure
+ String failure
 });
 
 
@@ -1037,19 +986,19 @@ $Res call({
 
 }
 /// @nodoc
-class __$FailureCopyWithImpl<$Res>
-    implements _$FailureCopyWith<$Res> {
-  __$FailureCopyWithImpl(this._self, this._then);
+class _$FailureCopyWithImpl<$Res>
+    implements $FailureCopyWith<$Res> {
+  _$FailureCopyWithImpl(this._self, this._then);
 
-  final _Failure _self;
-  final $Res Function(_Failure) _then;
+  final Failure _self;
+  final $Res Function(Failure) _then;
 
 /// Create a copy of ConversationsState
 /// with the given fields replaced by the non-null parameter values.
 @pragma('vm:prefer-inline') $Res call({Object? failure = null,}) {
-  return _then(_Failure(
+  return _then(Failure(
 failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure,
+as String,
   ));
 }
 
@@ -1070,7 +1019,7 @@ class WatchFailure implements ConversationsState {
   return EqualUnmodifiableListView(_conversations);
 }
 
- final  Failure failure;
+ final  String failure;
 
 /// Create a copy of ConversationsState
 /// with the given fields replaced by the non-null parameter values.
@@ -1102,7 +1051,7 @@ abstract mixin class $WatchFailureCopyWith<$Res> implements $ConversationsStateC
   factory $WatchFailureCopyWith(WatchFailure value, $Res Function(WatchFailure) _then) = _$WatchFailureCopyWithImpl;
 @useResult
 $Res call({
- List<ConversationEntity> conversations, Failure failure
+ List<ConversationEntity> conversations, String failure
 });
 
 
@@ -1123,43 +1072,11 @@ class _$WatchFailureCopyWithImpl<$Res>
   return _then(WatchFailure(
 conversations: null == conversations ? _self._conversations : conversations // ignore: cast_nullable_to_non_nullable
 as List<ConversationEntity>,failure: null == failure ? _self.failure : failure // ignore: cast_nullable_to_non_nullable
-as Failure,
+as String,
   ));
 }
 
 
 }
-
-/// @nodoc
-
-
-class _Empty implements ConversationsState {
-  const _Empty();
-  
-
-
-
-
-
-
-@override
-bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Empty);
-}
-
-
-@override
-int get hashCode => runtimeType.hashCode;
-
-@override
-String toString() {
-  return 'ConversationsState.empty()';
-}
-
-
-}
-
-
-
 
 // dart format on

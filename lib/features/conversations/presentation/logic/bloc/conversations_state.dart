@@ -2,24 +2,23 @@ part of 'conversations_bloc.dart';
 
 @freezed
 class ConversationsState with _$ConversationsState {
-  const factory ConversationsState.initial() = _Initial;
-  const factory ConversationsState.loading() = _Loading;
+  const factory ConversationsState.initial() = Initial;
+  const factory ConversationsState.loading() = Loading;
 
   const factory ConversationsState.loaded({
     required List<ConversationEntity> conversations,
     @Default(false) bool isRefreshing,
-  }) = _Loaded;
+  }) = Loaded;
 
-  /// خطأ كامل — القائمة فارغة
-  const factory ConversationsState.failure({required Failure failure}) =
-      _Failure;
+  const factory ConversationsState.empty() = Empty;
 
-  /// خطأ من Realtime — نعرض القائمة الحالية + snackbar في الـ UI
+  // خطأ كامل — لا بيانات
+  const factory ConversationsState.failure({required String failure}) =
+      Failure;
+
+  // خطأ في الـ stream — نُبقي القائمة الحالية ونُطلق snackbar
   const factory ConversationsState.watchFailure({
     required List<ConversationEntity> conversations,
-    required Failure failure,
+    required String failure,
   }) = WatchFailure;
-
-  const factory ConversationsState.empty() = _Empty;
 }
- 

@@ -146,6 +146,7 @@ class AppRouter {
 
       /// ✅ مسجل → إذا كان داخل login/register → ادخله للتطبيق
       if (isAuth && isAuthPage) {
+        
         return Routes.conversationsPage;
       }
 
