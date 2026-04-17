@@ -13,7 +13,6 @@ part 'conversations_state.dart';
 class ConversationsBloc extends Bloc<ConversationsEvent, ConversationsState> {
   final GetConversationsUseCase _getConversations;
   final WatchConversationsUseCase _watchConversations;
-  final SendMessageUseCase _sendMessage;
   final MarkAsReadUseCase _markAsRead;
 
   StreamSubscription<dynamic>? _sub;
@@ -21,11 +20,9 @@ class ConversationsBloc extends Bloc<ConversationsEvent, ConversationsState> {
   ConversationsBloc({
     required GetConversationsUseCase getConversations,
     required WatchConversationsUseCase watchConversations,
-    required SendMessageUseCase sendMessage,
     required MarkAsReadUseCase markAsRead,
   }) : _getConversations = getConversations,
        _watchConversations = watchConversations,
-       _sendMessage = sendMessage,
        _markAsRead = markAsRead,
        super(const ConversationsState.initial()) {
     on<_Load>(_onLoad);
@@ -33,7 +30,6 @@ class ConversationsBloc extends Bloc<ConversationsEvent, ConversationsState> {
     on<_StartWatching>(_onStartWatching);
     on<_Updated>(_onUpdated);
     on<_Error>(_onError);
-    on<_SendMessage>(_onSendMessage);
     on<_MarkAsRead>(_onMarkAsRead);
   }
 
@@ -96,19 +92,7 @@ class ConversationsBloc extends Bloc<ConversationsEvent, ConversationsState> {
 
   // ── Actions ───────────────────────────────────────────────────────────────
 
-  Future<void> _onSendMessage(
-    _SendMessage event,
-    Emitter<ConversationsState> emit,
-  ) async {
-    // كتابة فورية في SQLite — لا تحديث يدوي للـ state
-    // watchConversations() سيُصدر القائمة المحدّثة تلقائياً
-    await _sendMessage(
-      conversationId: event.conversationId,
-      content: event.content,
-      messageType: event.messageType,
-      replyToId: event.replyToId,
-    );
-  }
+
 
   Future<void> _onMarkAsRead(
     _MarkAsRead event,

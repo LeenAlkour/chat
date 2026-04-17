@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         state.whenOrNull(
-          authenticated: () {
+          authenticated: (user) {
             print("------------------------------------");
 
             

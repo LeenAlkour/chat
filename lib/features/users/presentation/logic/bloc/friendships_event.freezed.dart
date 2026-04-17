@@ -55,12 +55,12 @@ extension FriendshipsEventPatterns on FriendshipsEvent {
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( FetchAll value)?  fetchAll,TResult Function( FriendUpdated value)?  friendUpdated,TResult Function( SendRequest value)?  sendRequest,TResult Function( AcceptRequest value)?  acceptRequest,TResult Function( RejectRequest value)?  rejectRequest,required TResult orElse(),}){
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( WatchAllUsers value)?  watchAllUsers,TResult Function( UsersUpdated value)?  usersUpdated,TResult Function( SendRequest value)?  sendRequest,TResult Function( AcceptRequest value)?  acceptRequest,TResult Function( RejectRequest value)?  rejectRequest,required TResult orElse(),}){
 final _that = this;
 switch (_that) {
-case FetchAll() when fetchAll != null:
-return fetchAll(_that);case FriendUpdated() when friendUpdated != null:
-return friendUpdated(_that);case SendRequest() when sendRequest != null:
+case WatchAllUsers() when watchAllUsers != null:
+return watchAllUsers(_that);case UsersUpdated() when usersUpdated != null:
+return usersUpdated(_that);case SendRequest() when sendRequest != null:
 return sendRequest(_that);case AcceptRequest() when acceptRequest != null:
 return acceptRequest(_that);case RejectRequest() when rejectRequest != null:
 return rejectRequest(_that);case _:
@@ -81,12 +81,12 @@ return rejectRequest(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( FetchAll value)  fetchAll,required TResult Function( FriendUpdated value)  friendUpdated,required TResult Function( SendRequest value)  sendRequest,required TResult Function( AcceptRequest value)  acceptRequest,required TResult Function( RejectRequest value)  rejectRequest,}){
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( WatchAllUsers value)  watchAllUsers,required TResult Function( UsersUpdated value)  usersUpdated,required TResult Function( SendRequest value)  sendRequest,required TResult Function( AcceptRequest value)  acceptRequest,required TResult Function( RejectRequest value)  rejectRequest,}){
 final _that = this;
 switch (_that) {
-case FetchAll():
-return fetchAll(_that);case FriendUpdated():
-return friendUpdated(_that);case SendRequest():
+case WatchAllUsers():
+return watchAllUsers(_that);case UsersUpdated():
+return usersUpdated(_that);case SendRequest():
 return sendRequest(_that);case AcceptRequest():
 return acceptRequest(_that);case RejectRequest():
 return rejectRequest(_that);case _:
@@ -106,12 +106,12 @@ return rejectRequest(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( FetchAll value)?  fetchAll,TResult? Function( FriendUpdated value)?  friendUpdated,TResult? Function( SendRequest value)?  sendRequest,TResult? Function( AcceptRequest value)?  acceptRequest,TResult? Function( RejectRequest value)?  rejectRequest,}){
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( WatchAllUsers value)?  watchAllUsers,TResult? Function( UsersUpdated value)?  usersUpdated,TResult? Function( SendRequest value)?  sendRequest,TResult? Function( AcceptRequest value)?  acceptRequest,TResult? Function( RejectRequest value)?  rejectRequest,}){
 final _that = this;
 switch (_that) {
-case FetchAll() when fetchAll != null:
-return fetchAll(_that);case FriendUpdated() when friendUpdated != null:
-return friendUpdated(_that);case SendRequest() when sendRequest != null:
+case WatchAllUsers() when watchAllUsers != null:
+return watchAllUsers(_that);case UsersUpdated() when usersUpdated != null:
+return usersUpdated(_that);case SendRequest() when sendRequest != null:
 return sendRequest(_that);case AcceptRequest() when acceptRequest != null:
 return acceptRequest(_that);case RejectRequest() when rejectRequest != null:
 return rejectRequest(_that);case _:
@@ -131,11 +131,11 @@ return rejectRequest(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  fetchAll,TResult Function( UserFriend user)?  friendUpdated,TResult Function( String userId)?  sendRequest,TResult Function( String userId)?  acceptRequest,TResult Function( String userId)?  rejectRequest,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  watchAllUsers,TResult Function( Either<Failure, List<UserFriend>> result)?  usersUpdated,TResult Function( String userId)?  sendRequest,TResult Function( String userId)?  acceptRequest,TResult Function( String userId)?  rejectRequest,required TResult orElse(),}) {final _that = this;
 switch (_that) {
-case FetchAll() when fetchAll != null:
-return fetchAll();case FriendUpdated() when friendUpdated != null:
-return friendUpdated(_that.user);case SendRequest() when sendRequest != null:
+case WatchAllUsers() when watchAllUsers != null:
+return watchAllUsers();case UsersUpdated() when usersUpdated != null:
+return usersUpdated(_that.result);case SendRequest() when sendRequest != null:
 return sendRequest(_that.userId);case AcceptRequest() when acceptRequest != null:
 return acceptRequest(_that.userId);case RejectRequest() when rejectRequest != null:
 return rejectRequest(_that.userId);case _:
@@ -156,11 +156,11 @@ return rejectRequest(_that.userId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  fetchAll,required TResult Function( UserFriend user)  friendUpdated,required TResult Function( String userId)  sendRequest,required TResult Function( String userId)  acceptRequest,required TResult Function( String userId)  rejectRequest,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  watchAllUsers,required TResult Function( Either<Failure, List<UserFriend>> result)  usersUpdated,required TResult Function( String userId)  sendRequest,required TResult Function( String userId)  acceptRequest,required TResult Function( String userId)  rejectRequest,}) {final _that = this;
 switch (_that) {
-case FetchAll():
-return fetchAll();case FriendUpdated():
-return friendUpdated(_that.user);case SendRequest():
+case WatchAllUsers():
+return watchAllUsers();case UsersUpdated():
+return usersUpdated(_that.result);case SendRequest():
 return sendRequest(_that.userId);case AcceptRequest():
 return acceptRequest(_that.userId);case RejectRequest():
 return rejectRequest(_that.userId);case _:
@@ -180,11 +180,11 @@ return rejectRequest(_that.userId);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  fetchAll,TResult? Function( UserFriend user)?  friendUpdated,TResult? Function( String userId)?  sendRequest,TResult? Function( String userId)?  acceptRequest,TResult? Function( String userId)?  rejectRequest,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  watchAllUsers,TResult? Function( Either<Failure, List<UserFriend>> result)?  usersUpdated,TResult? Function( String userId)?  sendRequest,TResult? Function( String userId)?  acceptRequest,TResult? Function( String userId)?  rejectRequest,}) {final _that = this;
 switch (_that) {
-case FetchAll() when fetchAll != null:
-return fetchAll();case FriendUpdated() when friendUpdated != null:
-return friendUpdated(_that.user);case SendRequest() when sendRequest != null:
+case WatchAllUsers() when watchAllUsers != null:
+return watchAllUsers();case UsersUpdated() when usersUpdated != null:
+return usersUpdated(_that.result);case SendRequest() when sendRequest != null:
 return sendRequest(_that.userId);case AcceptRequest() when acceptRequest != null:
 return acceptRequest(_that.userId);case RejectRequest() when rejectRequest != null:
 return rejectRequest(_that.userId);case _:
@@ -198,8 +198,8 @@ return rejectRequest(_that.userId);case _:
 /// @nodoc
 
 
-class FetchAll implements FriendshipsEvent {
-  const FetchAll();
+class WatchAllUsers implements FriendshipsEvent {
+  const WatchAllUsers();
   
 
 
@@ -209,7 +209,7 @@ class FetchAll implements FriendshipsEvent {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FetchAll);
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is WatchAllUsers);
 }
 
 
@@ -218,7 +218,7 @@ int get hashCode => runtimeType.hashCode;
 
 @override
 String toString() {
-  return 'FriendshipsEvent.fetchAll()';
+  return 'FriendshipsEvent.watchAllUsers()';
 }
 
 
@@ -230,76 +230,67 @@ String toString() {
 /// @nodoc
 
 
-class FriendUpdated implements FriendshipsEvent {
-  const FriendUpdated(this.user);
+class UsersUpdated implements FriendshipsEvent {
+  const UsersUpdated(this.result);
   
 
- final  UserFriend user;
+ final  Either<Failure, List<UserFriend>> result;
 
 /// Create a copy of FriendshipsEvent
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
 @pragma('vm:prefer-inline')
-$FriendUpdatedCopyWith<FriendUpdated> get copyWith => _$FriendUpdatedCopyWithImpl<FriendUpdated>(this, _$identity);
+$UsersUpdatedCopyWith<UsersUpdated> get copyWith => _$UsersUpdatedCopyWithImpl<UsersUpdated>(this, _$identity);
 
 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is FriendUpdated&&(identical(other.user, user) || other.user == user));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is UsersUpdated&&(identical(other.result, result) || other.result == result));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,user);
+int get hashCode => Object.hash(runtimeType,result);
 
 @override
 String toString() {
-  return 'FriendshipsEvent.friendUpdated(user: $user)';
+  return 'FriendshipsEvent.usersUpdated(result: $result)';
 }
 
 
 }
 
 /// @nodoc
-abstract mixin class $FriendUpdatedCopyWith<$Res> implements $FriendshipsEventCopyWith<$Res> {
-  factory $FriendUpdatedCopyWith(FriendUpdated value, $Res Function(FriendUpdated) _then) = _$FriendUpdatedCopyWithImpl;
+abstract mixin class $UsersUpdatedCopyWith<$Res> implements $FriendshipsEventCopyWith<$Res> {
+  factory $UsersUpdatedCopyWith(UsersUpdated value, $Res Function(UsersUpdated) _then) = _$UsersUpdatedCopyWithImpl;
 @useResult
 $Res call({
- UserFriend user
+ Either<Failure, List<UserFriend>> result
 });
 
 
-$UserFriendCopyWith<$Res> get user;
+
 
 }
 /// @nodoc
-class _$FriendUpdatedCopyWithImpl<$Res>
-    implements $FriendUpdatedCopyWith<$Res> {
-  _$FriendUpdatedCopyWithImpl(this._self, this._then);
+class _$UsersUpdatedCopyWithImpl<$Res>
+    implements $UsersUpdatedCopyWith<$Res> {
+  _$UsersUpdatedCopyWithImpl(this._self, this._then);
 
-  final FriendUpdated _self;
-  final $Res Function(FriendUpdated) _then;
+  final UsersUpdated _self;
+  final $Res Function(UsersUpdated) _then;
 
 /// Create a copy of FriendshipsEvent
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? user = null,}) {
-  return _then(FriendUpdated(
-null == user ? _self.user : user // ignore: cast_nullable_to_non_nullable
-as UserFriend,
+@pragma('vm:prefer-inline') $Res call({Object? result = null,}) {
+  return _then(UsersUpdated(
+null == result ? _self.result : result // ignore: cast_nullable_to_non_nullable
+as Either<Failure, List<UserFriend>>,
   ));
 }
 
-/// Create a copy of FriendshipsEvent
-/// with the given fields replaced by the non-null parameter values.
-@override
-@pragma('vm:prefer-inline')
-$UserFriendCopyWith<$Res> get user {
-  
-  return $UserFriendCopyWith<$Res>(_self.user, (value) {
-    return _then(_self.copyWith(user: value));
-  });
-}
+
 }
 
 /// @nodoc

@@ -20,22 +20,7 @@ class WatchConversationsUseCase {
       _repository.watchConversations();
 }
 
-class SendMessageUseCase {
-  final ConversationsRepository _repository;
-  SendMessageUseCase(this._repository);
 
-  Future<Either<Failure, void>> call({
-    required String conversationId,
-    required String content,
-    String messageType = 'text',
-    String? replyToId,
-  }) => _repository.sendMessage(
-    conversationId: conversationId,
-    content: content,
-    messageType: messageType,
-    replyToId: replyToId,
-  );
-}
 
 class MarkAsReadUseCase {
   final ConversationsRepository _repository;

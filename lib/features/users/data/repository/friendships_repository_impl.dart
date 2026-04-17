@@ -1,65 +1,99 @@
+// lib/features/users/data/repository/friendships_repository_impl.dart
+//
+// ┌──────────────────────────────────────────────────────────────────┐
+// │  Supabase  →  كل المستخدمين (one-shot عند كل تغيير في Stream)   │
+// │  PowerSync →  friendships (reactive Stream)                      │
+// │  الدمج     →  نضع حالة الصداقة الصحيحة على كل مستخدم            │
+// └──────────────────────────────────────────────────────────────────┘
+
 import 'package:chato/core/errors/error_handler.dart';
 import 'package:chato/core/errors/failure.dart';
-import 'package:chato/features/users/data/source/friendships_remote_data_source.dart';
+import 'package:chato/features/users/data/source/friendships_local_datasource.dart';
+import 'package:chato/features/users/data/source/users_remote_datasource.dart';
 import 'package:chato/features/users/domain/entities/user_friend_entity.dart';
-import 'package:chato/features/users/domain/repository/friendships_Repository.dart';
+import 'package:chato/features/users/domain/repository/friendships_repository.dart';
 import 'package:dartz/dartz.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FriendshipsRepositoryImpl implements FriendshipsRepository {
-  final FriendshipsRemoteDataSource remote;
+  final UsersRemoteDataSource remoteDataSource;
+  final FriendshipsLocalDataSource localDataSource;
 
-  FriendshipsRepositoryImpl({required this.remote});
+  FriendshipsRepositoryImpl({
+    required this.remoteDataSource,
+    required this.localDataSource,
+  });
+
+  String get _currentUserId =>
+      Supabase.instance.client.auth.currentUser!.id;
 
   @override
-  Future<Either<Failure, List<UserFriend>>> getAllFriendships() async {
-    try {
-      final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-      final users = await remote.getFriendships(currentUserId);
-      return Right(users);
-    } catch (e) {
-      return Left(ErrorHandler.handle(e));
-    }
+  Stream<Either<Failure, List<UserFriend>>> watchAllUsers() {
+    final currentUserId = _currentUserId;
+
+    return localDataSource
+        .watchFriendships(currentUserId)
+        .asyncMap((friendshipRows) async {
+          // جلب كل المستخدمين من Supabase
+          final allUsers =
+              await remoteDataSource.getAllUsers(currentUserId);
+
+          // بناء Map سريع: userId → friendship row
+          final friendshipMap = <String, Map<String, dynamic>>{};
+          for (final row in friendshipRows) {
+            final otherId = row['other_user_id'] as String;
+            friendshipMap[otherId] = row;
+          }
+
+          // دمج البيانات
+          final merged = allUsers.map((user) {
+            final friendship = friendshipMap[user.id];
+            if (friendship == null) return user; // لا توجد علاقة
+
+            return user.withFriendship(
+              friendshipId: friendship['id'] as String,
+              status: friendship['status'] as String,
+              isSentByMe:
+                  (friendship['requester_id'] as String) == currentUserId,
+            );
+          }).toList();
+
+          return Right<Failure, List<UserFriend>>(
+            merged.map((m) => m.toEntity()).toList(),
+          );
+        })
+        .handleError(
+          (e) => Left<Failure, List<UserFriend>>(ErrorHandler.handle(e)),
+        );
   }
 
   @override
-  void subscribeToFriendshipsUpdates(void Function(UserFriend) onUpdate) {
-    final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-    remote.subscribeToUpdates(currentUserId, onUpdate);
-  }
-   @override
   Future<Either<Failure, Unit>> sendRequest(String userId) async {
     try {
-      final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-      await remote.sendRequest(currentUserId, userId);
+      await localDataSource.sendRequest(_currentUserId, userId);
       return const Right(unit);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
-
     }
   }
 
   @override
   Future<Either<Failure, Unit>> acceptRequest(String userId) async {
     try {
-      final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-      await remote.acceptRequest(currentUserId, userId);
+      await localDataSource.acceptRequest(_currentUserId, userId);
       return const Right(unit);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
-
     }
   }
 
   @override
   Future<Either<Failure, Unit>> rejectRequest(String userId) async {
     try {
-      final currentUserId = Supabase.instance.client.auth.currentUser!.id;
-      await remote.rejectRequest(currentUserId, userId);
+      await localDataSource.rejectRequest(_currentUserId, userId);
       return const Right(unit);
     } catch (e) {
       return Left(ErrorHandler.handle(e));
-
     }
   }
 }

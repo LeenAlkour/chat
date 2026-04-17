@@ -1,3 +1,5 @@
+// lib/features/users/presentation/pages/users_page.dart
+
 import 'package:chato/features/users/domain/entities/user_friend_entity.dart';
 import 'package:chato/features/users/presentation/logic/bloc/friendships_bloc.dart';
 import 'package:chato/features/users/presentation/logic/bloc/friendships_event.dart';
@@ -5,35 +7,42 @@ import 'package:chato/features/users/presentation/logic/bloc/friendships_state.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UsersPage extends StatelessWidget {
+class UsersPage extends StatefulWidget {
   const UsersPage({super.key});
+
+  @override
+  State<UsersPage> createState() => _UsersPageState();
+}
+
+class _UsersPageState extends State<UsersPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<FriendshipsBloc>().add(
+          const FriendshipsEvent.watchAllUsers(),
+        );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Users'), centerTitle: true),
+      appBar: AppBar(title: const Text('People'), centerTitle: true),
       body: BlocBuilder<FriendshipsBloc, FriendshipsState>(
         builder: (context, state) {
           return state.when(
             initial: () => const SizedBox(),
-
             loading: () => const Center(child: CircularProgressIndicator()),
-
             error: (msg) => Center(child: Text(msg)),
-
             loaded: (users) {
               if (users.isEmpty) {
-                return const Center(child: Text('No users'));
+                return const Center(child: Text('No users found'));
               }
-
               return ListView.separated(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: users.length,
-                separatorBuilder: (_, __) => const SizedBox(height: 8),
-                itemBuilder: (context, index) {
-                  final user = users[index];
-                  return _UserTile(user: user);
-                },
+                separatorBuilder: (_, __) =>
+                    const Divider(height: 1, indent: 72),
+                itemBuilder: (context, i) => _UserTile(user: users[i]),
               );
             },
           );
@@ -42,122 +51,110 @@ class UsersPage extends StatelessWidget {
     );
   }
 }
+
+// ── Tile ──────────────────────────────────────────────────────────────────────
+
 class _UserTile extends StatelessWidget {
   final UserFriend user;
-
   const _UserTile({required this.user});
 
   @override
   Widget build(BuildContext context) {
-
-    final state = context.watch<FriendshipsBloc>().state;
-
-   bool isLoading = false;
-
-    state.maybeWhen(
-      loaded: (users, {bool isActionLoading = false, String? actionUserId}) {
-        isLoading = isActionLoading && actionUserId == user.id;
-      },
-      orElse: () {
-        isLoading = false;
-      },
-    );
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(12),
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Colors.blue.shade300,
+        backgroundImage:
+            user.avatarUrl != null ? NetworkImage(user.avatarUrl!) : null,
+        child: user.avatarUrl == null
+            ? Text(
+                user.username.isNotEmpty
+                    ? user.username[0].toUpperCase()
+                    : '?',
+                style: const TextStyle(
+                    color: Colors.white, fontWeight: FontWeight.bold),
+              )
+            : null,
       ),
-      child: Row(
-        children: [
-          // 🔥 Avatar
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: Colors.blue.shade200,
-            // child: user.avatarUrl != null
-            //     ? ClipOval(
-            //         child: Image.network(
-            //           user.avatarUrl!,
-            //           width: 44,
-            //           height: 44,
-            //           fit: BoxFit.cover,
-            //         ),
-            //       )
-            //     : Text(user.username[0].toUpperCase()),
-          ),
-
-          const SizedBox(width: 12),
-
-          // 🔥 Username
-          Expanded(
-            child: Text(
-              user.username,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-          ),
-
-          // 🔥 Action Button
-          _buildActionButton(context, user, isLoading),
-        ],
+      title: Text(
+        user.username,
+        style: const TextStyle(fontWeight: FontWeight.w600),
       ),
+      subtitle: user.isOnline
+          ? Row(
+              children: const [
+                Icon(Icons.circle, size: 8, color: Colors.green),
+                SizedBox(width: 4),
+                Text('Online', style: TextStyle(color: Colors.green)),
+              ],
+            )
+          : null,
+      trailing: _ActionButton(user: user),
     );
   }
+}
 
-  Widget _buildActionButton(
-    BuildContext context,
-    UserFriend user,
-    bool isLoading,
-  ) {
+// ── Action Button ─────────────────────────────────────────────────────────────
+
+class _ActionButton extends StatelessWidget {
+  final UserFriend user;
+  const _ActionButton({required this.user});
+
+  @override
+  Widget build(BuildContext context) {
     final bloc = context.read<FriendshipsBloc>();
 
     switch (user.status) {
       case FriendStatus.none:
-        return ElevatedButton(
-          onPressed: isLoading
-              ? null
-              : () => bloc.add(FriendshipsEvent.sendRequest(user.id)),
-          child: isLoading
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Text('Add'),
+        return FilledButton.icon(
+          onPressed: () => bloc.add(FriendshipsEvent.sendRequest(user.id)),
+          icon: const Icon(Icons.person_add, size: 16),
+          label: const Text('Add'),
         );
 
       case FriendStatus.pendingSent:
-        return const Text('Pending', style: TextStyle(color: Colors.orange));
+        return OutlinedButton(
+          onPressed: null,
+          child: const Text('Pending',
+              style: TextStyle(color: Colors.orange)),
+        );
 
       case FriendStatus.pendingReceived:
         return Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () => bloc.add(FriendshipsEvent.acceptRequest(user.id)),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-              child: isLoading
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Text('Accept'),
+            FilledButton(
+              onPressed: () =>
+                  bloc.add(FriendshipsEvent.acceptRequest(user.id)),
+              style: FilledButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                minimumSize: const Size(0, 36),
+              ),
+              child: const Text('Accept'),
             ),
             const SizedBox(width: 6),
-            ElevatedButton(
-              onPressed: isLoading
-                  ? null
-                  : () => bloc.add(FriendshipsEvent.rejectRequest(user.id)),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            OutlinedButton(
+              onPressed: () =>
+                  bloc.add(FriendshipsEvent.rejectRequest(user.id)),
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.red,
+                side: const BorderSide(color: Colors.red),
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                minimumSize: const Size(0, 36),
+              ),
               child: const Text('Reject'),
             ),
           ],
         );
 
       case FriendStatus.accepted:
-        return const Text('Friends', style: TextStyle(color: Colors.green));
+        return const Chip(
+          avatar: Icon(Icons.check, size: 14, color: Colors.green),
+          label: Text('Friends'),
+          backgroundColor: Color(0xFFE8F5E9),
+          labelStyle: TextStyle(color: Colors.green),
+          padding: EdgeInsets.zero,
+        );
     }
   }
 }

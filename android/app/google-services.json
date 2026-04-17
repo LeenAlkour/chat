@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "750347646828",
+    "project_id": "chato-88fa6",
+    "storage_bucket": "chato-88fa6.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:750347646828:android:2f68c73f7b725270e36549",
+        "android_client_info": {
+          "package_name": "com.example.chato"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbQ-jOTe-dXB7chkMOsXIMvM-4l62pGF4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

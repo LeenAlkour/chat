@@ -1,6 +1,8 @@
+import 'package:chato/core/router/routes.dart';
 import 'package:chato/features/conversations/presentation/logic/bloc/conversations_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../domain/entities/conversation_entity.dart';
 import 'conversation_tile.dart';
@@ -19,21 +21,19 @@ class ConversationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return RefreshIndicator(
       onRefresh: () async {
-        context
-            .read<ConversationsBloc>()
-            .add(const ConversationsEvent.refresh());
+        context.read<ConversationsBloc>().add(
+          const ConversationsEvent.refresh(),
+        );
         // ننتظر انتهاء الريفريش
         await context.read<ConversationsBloc>().stream.firstWhere(
-              (s) => s is Loaded || s is Failure,
-            );
+          (s) => s is Loaded || s is Failure,
+        );
       },
       child: CustomScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         slivers: [
           if (isRefreshing)
-            const SliverToBoxAdapter(
-              child: LinearProgressIndicator(),
-            ),
+            const SliverToBoxAdapter(child: LinearProgressIndicator()),
           SliverList.separated(
             itemCount: conversations.length,
             separatorBuilder: (_, __) => Divider(
@@ -46,7 +46,7 @@ class ConversationList extends StatelessWidget {
               return ConversationTile(
                 conversation: conversation,
                 onTap: () {
-                  // TODO: navigate to chat
+                  context.pushNamed(Routes.messagesPage, extra: conversation);
                 },
                 onLongPress: () => _showOptions(context, conversation),
               );

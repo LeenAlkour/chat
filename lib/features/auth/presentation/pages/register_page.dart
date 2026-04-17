@@ -93,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         state.whenOrNull(
-          authenticated: () {},
+          authenticated: (user) {},
           failure: (message) {
             print(message);
 
